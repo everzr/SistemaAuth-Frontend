@@ -41,7 +41,7 @@ return (
           <small>¿No tienes cuenta? <a href="/register-face">Regístrate</a></small>
         </div>
         <div className="text-center mt-3">
-          <small>Iniciar Sesion con cara <a href="/login-face">Regístrate</a></small>
+          <small> <a href="/login-face">Iniciar Sesion con cara</a></small>
         </div>
       </div>
     </div>
