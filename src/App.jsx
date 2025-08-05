@@ -1,20 +1,23 @@
-import { useEffect, useState } from 'react';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import LoginPage from "./pages/Login/Login";
+import Proof from "./pages/proof";
+import FaceAuth from './components/FaceAuth'
+import LoginFace from "./components/LoginFace";
+import RegisterFace from "./components/RegisterFace";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
-  const [mensaje, setMensaje] = useState('Cargando...');
-
-  useEffect(() => {
-    fetch('http://localhost:4000/api/proof/prueba')
-      .then(res => res.text())
-      .then(data => setMensaje(data))
-      .catch(() => setMensaje('Error al conectar con la API'));
-  }, []);
-
   return (
-    <div style={{ padding: '2rem', fontFamily: 'Arial' }}>
-      <h1>Respuesta de la API:</h1>
-      <p>{mensaje}</p>
-    </div>
+    <BrowserRouter>
+
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/proof" element={<Proof />} />
+        <Route path="/face" element={<FaceAuth />} />
+        <Route path="/login-face" element={<LoginFace/>}/>
+        <Route path="/register-face" element={<RegisterFace/>}/>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
