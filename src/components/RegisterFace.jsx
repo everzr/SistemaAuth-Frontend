@@ -48,13 +48,46 @@ const RegisterFace = () => {
     alert(data.message || 'Registrado');
   };
 
-  return (
-    <div>
-      <h2>Registrar rostro</h2>
-      {loading ? <p>Cargando modelos...</p> : <video ref={videoRef} autoPlay width="320" height="240" />}
-      <input type="text" placeholder="Nombre" value={nombre} onChange={e => setNombre(e.target.value)} />
-      <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
-      <button onClick={handleRegister} disabled={loading}>Registrar</button>
+return (
+    <div className="container mt-5">
+      <div className="card shadow p-4 mx-auto" style={{ maxWidth: '500px' }}>
+        <h4 className="mb-4 text-center">📷 Registrar Rostro</h4>
+
+        <div className="text-center mb-3">
+          {loading
+            ? <p className="text-muted">Cargando modelos...</p>
+            : <video ref={videoRef} autoPlay width="320" height="240" className="rounded border" />
+          }
+        </div>
+
+        <div className="mb-3">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Nombre"
+            value={nombre}
+            onChange={e => setNombre(e.target.value)}
+          />
+        </div>
+
+        <div className="mb-3">
+          <input
+            type="email"
+            className="form-control"
+            placeholder="Correo electrónico"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+          />
+        </div>
+
+        <button
+          className="btn btn-primary w-100"
+          onClick={handleRegister}
+          disabled={loading}
+        >
+          Registrar
+        </button>
+      </div>
     </div>
   );
 };
