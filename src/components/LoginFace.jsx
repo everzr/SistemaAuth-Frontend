@@ -22,8 +22,12 @@ const LoginFace = () => {
   }, []);
 
   const startVideo = () => {
-    navigator.mediaDevices.getUserMedia({ video: {} })
-      .then(stream => videoRef.current.srcObject = stream)
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } }) // 👈 Selfie camera
+      .then(stream => {
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+        }
+      })
       .catch(err => console.error('Error al acceder a la cámara', err));
   };
 
@@ -54,12 +58,46 @@ const LoginFace = () => {
   };
 
   return (
-    <div>
-      <h2>Iniciar sesión con rostro</h2>
-      {loading ? <p>Cargando modelos...</p> : <video ref={videoRef} autoPlay width="320" height="240" />}
-      <br />
-      <button onClick={handleLogin} disabled={loading}>Verificar</button>
-      {isAuthorized && <p>✅ Bienvenido, {nombre}!</p>}
+    <div className="container py-5">
+      <div className="row justify-content-center">
+        <div className="col-md-6 col-lg-5">
+          <div className="card shadow">
+            <div className="card-body text-center">
+              <h3 className="card-title mb-4">Iniciar sesión con rostro</h3>
+
+              {loading ? (
+                <div className="spinner-border text-primary" role="status">
+                  <span className="visually-hidden">Cargando modelos...</span>
+                </div>
+              ) : (
+                <video
+                  ref={videoRef}
+                  autoPlay
+                  playsInline
+                  width="100%"
+                  height="auto"
+                  className="rounded mb-3 border"
+                  style={{ transform: 'scaleX(-1)' }} // 👈 Espejo
+                />
+              )}
+
+              <button
+                onClick={handleLogin}
+                disabled={loading}
+                className="btn btn-primary w-100"
+              >
+                Verificar rostro
+              </button>
+
+              {isAuthorized && (
+                <div className="alert alert-success mt-3">
+                  ✅ Bienvenido, <strong>{nombre}</strong>!
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
