@@ -41,17 +41,22 @@ const LoginFace = () => {
 
     const descriptor = Array.from(result.descriptor);
 
-    const response = await fetch('http://localhost:4000/api/face/login-face', {
+    const response = await fetch('http://localhost:4000/api/login/login-face', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ descriptor }),
     });
 
     const data = await response.json();
+    console.log("Respuesta backend:", data);
 
     if (data.success) {
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("usuario", data.usuario)
       setIsAuthorized(true);
-      setNombre(data.nombre);
+      setNombre(data.usuario.nombre);
+      alert(`✅ Bienvenido ${data.usuario.nombre}`);
     } else {
       alert(data.message || '❌ No reconocido');
     }

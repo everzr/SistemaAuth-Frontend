@@ -1,11 +1,11 @@
 // src/pages/Login/Login.jsx
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import {fetchToken} from "../../utils/api"
 // Requiere en frontend/.env: VITE_API_URL=http://localhost:4000
 
 export default function Login() {
-  const [correo, setCorreo] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [yaAutenticado, setYaAutenticado] = useState(false);
@@ -28,16 +28,28 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!correo || !password) {
+    if (!email || !password) {
       setError("Por favor, completa todos los campos.");
       return;
     }
 
-    console.log("Correo:", correo);
-    console.log("Password:", password);
-    setError("");
+    const res = await fetch('http://localhost:4000/api/login/login-normal', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+
+      const data = await res.json();
+    if (res.ok) {
+      alert(data.message);
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("usuario", data.usuario)
+      window.location.href = "/proof"; // o donde quieras redirigir
+    } else {
+      alert(data.error || "Error en login");
+    }
     alert("Inicio de sesión exitoso");
-    navigate("/proof");
+    //navigate("/proof");
   };
 
   // OAuth: redirección al backend
@@ -139,16 +151,16 @@ export default function Login() {
         {/* Form tradicional */}
         <form onSubmit={handleSubmit} style={styles.form}>
           <div style={styles.inputGroup}>
-            <label htmlFor="correo" style={styles.label}>
+            <label htmlFor="email" style={styles.label}>
               Correo electrónico
             </label>
             <input
               type="email"
               style={styles.input}
-              id="correo"
+              id="email"
               placeholder="tu@email.com"
-              value={correo}
-              onChange={(e) => setCorreo(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               onFocus={(e) => (e.target.style.borderColor = "#4F46E5")}
               onBlur={(e) => (e.target.style.borderColor = "#E5E7EB")}
             />
@@ -373,6 +385,7 @@ const styles = {
   input: {
     padding: "14px 16px",
     borderRadius: "10px",
+    color: "black",
     border: "2px solid #E5E7EB",
     fontSize: "16px",
     transition: "all 0.2s",
