@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as faceapi from 'face-api.js';
+import { fetchToken } from "../utils/api";
 
 const RegisterFace = () => {
   const videoRef = useRef(null);
   const [loading, setLoading] = useState(true);
   const [nombre, setNombre] = useState('');
   const [email, setEmail] = useState('');
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const loadModels = async () => {
@@ -27,26 +29,23 @@ const RegisterFace = () => {
       .catch(err => console.error('Error al acceder a la cámara', err));
   };
 
-  const handleRegister = async () => {
-    const result = await faceapi
-      .detectSingleFace(videoRef.current, new faceapi.TinyFaceDetectorOptions())
-      .withFaceLandmarks()
-      .withFaceDescriptor();
+ const handleRegister = async () => {
+  const result = await faceapi
+    .detectSingleFace(videoRef.current, new faceapi.TinyFaceDetectorOptions())
+    .withFaceLandmarks()
+    .withFaceDescriptor();
 
-    if (!result) return alert('❌ No se detectó el rostro');
+  if (!result) return alert('❌ No se detectó el rostro');
 
-    const descriptor = Array.from(result.descriptor); // Convierte Float32Array a Array
+const descriptor = Array.from(result.descriptor);
+  const data = await fetchToken("http://localhost:4000/api/login/register-face", {
+    method: "POST",
+    body: JSON.stringify({ nombre, email, descriptor }),
+  });
 
-    // Envía al backend
-    const response = await fetch('http://localhost:4000/api/face/register-face', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nombre, email, descriptor }),
-    });
+  if (data) alert(data.message || "Registrado correctamente");
+};
 
-    const data = await response.json();
-    alert(data.message || 'Registrado');
-  };
 
 return (
     <div className="container mt-5">
