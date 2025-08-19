@@ -1,25 +1,37 @@
+// src/App.jsx
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+
 import LoginPage from "./pages/Login/Login";
 import FaceAuth from "./components/FaceAuth";
 import LoginFace from "./components/LoginFace";
 import RegisterFace from "./components/RegisterFace";
+
 import Home from "./pages/Home/Home";
 import Proof from "./pages/proof/proof";
-import PostDetail from "./pages/PostDetails"; // ojo: singular si tu archivo es así
+import PostDetail from "./pages/PostDetails";
 import CategoryList from "./pages/CategoryList/CategoryList";
 import TagList from "./pages/TagList/TagList";
 import StaticPage from "./pages/StaticPage";
+
 import AppLayout from "./components/Layout/AppLayout";
-import "bootstrap/dist/css/bootstrap.min.css";
+import SecretPage from "./pages/Secret/SecretPage";
+
+// Listener global del “código secreto”
+import SecretHotKey from "./components/SecretHotKey";
 
 export default function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        {/* Rutas sin navbar */}
-        <Route path="/" element={<LoginPage />} />
+      {/* Escucha global del teclado para abrir el modal de PIN */}
+      <SecretHotKey />
 
-        {/* Rutas con navbar (hijas del layout) */}
+      <Routes>
+        {/* Páginas sin navbar */}
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/secret" element={<SecretPage />} />
+
+        {/* Páginas con navbar (hijas del layout) */}
         <Route element={<AppLayout />}>
           <Route path="/home" element={<Home />} />
           <Route path="/proof" element={<Proof />} />
@@ -32,6 +44,7 @@ export default function App() {
           <Route path="/p/:slug" element={<StaticPage />} />
         </Route>
 
+        {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
