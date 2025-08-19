@@ -16,6 +16,7 @@ import StaticPage from "./pages/StaticPage";
 
 import AppLayout from "./components/Layout/AppLayout";
 import SecretPage from "./pages/Secret/SecretPage";
+import VoicePage from "./pages/VoicePage"; // 👈 NUEVO
 
 // Listener global del “código secreto”
 import SecretHotKey from "./components/SecretHotKey";
@@ -23,15 +24,13 @@ import SecretHotKey from "./components/SecretHotKey";
 export default function App() {
   return (
     <BrowserRouter>
-      {/* Escucha global del teclado para abrir el modal de PIN */}
       <SecretHotKey />
-
       <Routes>
         {/* Páginas sin navbar */}
         <Route path="/" element={<LoginPage />} />
         <Route path="/secret" element={<SecretPage />} />
-
-        {/* Páginas con navbar (hijas del layout) */}
+        <Route path="/voice" element={<VoicePage />} /> {/* 👈 NUEVO */}
+        {/* Páginas con navbar */}
         <Route element={<AppLayout />}>
           <Route path="/home" element={<Home />} />
           <Route path="/proof" element={<Proof />} />
@@ -43,7 +42,6 @@ export default function App() {
           <Route path="/etiquetas" element={<TagList />} />
           <Route path="/p/:slug" element={<StaticPage />} />
         </Route>
-
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
