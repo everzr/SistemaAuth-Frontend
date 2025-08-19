@@ -1,5 +1,7 @@
 // src/pages/proof.jsx
 import { useState, useEffect } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./Proof.css"; // Assuming you have a CSS file for styling
 
 export default function Proof() {
   const [mensaje, setMensaje] = useState("Cargando...");
