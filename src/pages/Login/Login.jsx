@@ -43,13 +43,15 @@ export default function Login() {
     if (res.ok) {
       alert(data.message);
       localStorage.setItem("token", data.token);
-      localStorage.setItem("usuario", data.usuario)
+      //localStorage.setItem("usuario", data.usuario)
+      localStorage.setItem("usuario", JSON.stringify(data.usuario)); // ✅ convertir a string
+        alert("Inicio de sesión exitoso");
+    //navigate("/proof");
       window.location.href = "/proof"; // o donde quieras redirigir
     } else {
       alert(data.error || "Error en login");
     }
-    alert("Inicio de sesión exitoso");
-    //navigate("/proof");
+  
   };
 
   // OAuth: redirección al backend
@@ -209,7 +211,7 @@ export default function Login() {
         <div style={styles.footer}>
           <div style={styles.footerLink}>
             ¿No tienes cuenta?{" "}
-            <a href="/register-face" style={styles.link}>
+            <a href="/register" style={styles.link}>
               Crear cuenta
             </a>
           </div>

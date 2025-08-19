@@ -47,6 +47,7 @@ export default function Navbar() {
     { to: "/categorias", label: "Categorías", icon: "📂" },
     { to: "/etiquetas", label: "Etiquetas", icon: "🏷️" },
     { to: "/p/acerca-de", label: "Acerca", icon: "ℹ️" },
+    { to: "/settings", label: "Ajustes", icon: "⚙️" },
   ];
 
   return (
