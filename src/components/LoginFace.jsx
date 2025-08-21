@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as faceapi from 'face-api.js';
+import { useNavigate } from "react-router-dom";
 
 const LoginFace = () => {
   const videoRef = useRef(null);
   const [loading, setLoading] = useState(true);
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [nombre, setNombre] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadModels = async () => {
@@ -53,10 +55,12 @@ const LoginFace = () => {
     if (data.success) {
 
       localStorage.setItem("token", data.token);
-      localStorage.setItem("usuario", data.usuario)
+      localStorage.setItem("usuario", JSON.stringify(data.usuario)); // ✅ convertir a string
+      //localStorage.setItem("usuario", data.usuario)
       setIsAuthorized(true);
       setNombre(data.usuario.nombre);
       alert(`✅ Bienvenido ${data.usuario.nombre}`);
+      navigate("/proof"); // <-- redirige aquí
     } else {
       alert(data.message || '❌ No reconocido');
     }
