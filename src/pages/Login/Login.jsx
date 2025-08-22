@@ -1,7 +1,7 @@
 // src/pages/Login/Login.jsx
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {fetchToken} from "../../utils/api"
+import { fetchToken } from "../../utils/api";
 // Requiere en frontend/.env: VITE_API_URL=http://localhost:4000
 
 export default function Login() {
@@ -33,25 +33,24 @@ export default function Login() {
       return;
     }
 
-    const res = await fetch('http://localhost:4000/api/login/login-normal', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const res = await fetch("http://localhost:4000/api/login/login-normal", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
 
-      const data = await res.json();
+    const data = await res.json();
     if (res.ok) {
       alert(data.message);
       localStorage.setItem("token", data.token);
       //localStorage.setItem("usuario", data.usuario)
       localStorage.setItem("usuario", JSON.stringify(data.usuario)); // ✅ convertir a string
-        alert("Inicio de sesión exitoso");
-    //navigate("/proof");
+      alert("Inicio de sesión exitoso");
+      //navigate("/proof");
       window.location.href = "/proof"; // o donde quieras redirigir
     } else {
       alert(data.error || "Error en login");
     }
-  
   };
 
   // OAuth: redirección al backend
