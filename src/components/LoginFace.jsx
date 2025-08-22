@@ -1,17 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react';
-import * as faceapi from 'face-api.js';
+import React, { useEffect, useRef, useState } from "react";
+import * as faceapi from "face-api.js";
 import { useNavigate } from "react-router-dom";
 
 const LoginFace = () => {
   const videoRef = useRef(null);
   const [loading, setLoading] = useState(true);
   const [isAuthorized, setIsAuthorized] = useState(false);
-  const [nombre, setNombre] = useState('');
+  const [nombre, setNombre] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     const loadModels = async () => {
-      const MODEL_URL = '/models';
+      const MODEL_URL = "/models";
       await Promise.all([
         faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
         faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
@@ -24,13 +24,14 @@ const LoginFace = () => {
   }, []);
 
   const startVideo = () => {
-    navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } }) // 👈 Selfie camera
-      .then(stream => {
+    navigator.mediaDevices
+      .getUserMedia({ video: { facingMode: "user" } }) // 👈 Selfie camera
+      .then((stream) => {
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
         }
       })
-      .catch(err => console.error('Error al acceder a la cámara', err));
+      .catch((err) => console.error("Error al acceder a la cámara", err));
   };
 
   const handleLogin = async () => {
@@ -39,13 +40,13 @@ const LoginFace = () => {
       .withFaceLandmarks()
       .withFaceDescriptor();
 
-    if (!result) return alert('❌ No se detectó el rostro');
+    if (!result) return alert("❌ No se detectó el rostro");
 
     const descriptor = Array.from(result.descriptor);
 
-    const response = await fetch('http://localhost:4000/api/login/login-face', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const response = await fetch("http://localhost:4000/api/login/login-face", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ descriptor }),
     });
 
@@ -53,16 +54,15 @@ const LoginFace = () => {
     console.log("Respuesta backend:", data);
 
     if (data.success) {
-
       localStorage.setItem("token", data.token);
       localStorage.setItem("usuario", JSON.stringify(data.usuario)); // ✅ convertir a string
       //localStorage.setItem("usuario", data.usuario)
       setIsAuthorized(true);
       setNombre(data.usuario.nombre);
       alert(`✅ Bienvenido ${data.usuario.nombre}`);
-      navigate("/proof"); // <-- redirige aquí
+      navigate("/home"); // <-- redirige aquí
     } else {
-      alert(data.message || '❌ No reconocido');
+      alert(data.message || "❌ No reconocido");
     }
   };
 
@@ -86,7 +86,7 @@ const LoginFace = () => {
                   width="100%"
                   height="auto"
                   className="rounded mb-3 border"
-                  style={{ transform: 'scaleX(-1)' }} // 👈 Espejo
+                  style={{ transform: "scaleX(-1)" }} // 👈 Espejo
                 />
               )}
 
