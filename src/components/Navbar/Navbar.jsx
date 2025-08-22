@@ -57,6 +57,9 @@ export default function Navbar() {
       });
       setIsOpen(false);
       setDropdownOpen(false);
+      localStorage.removeItem("usuario");
+localStorage.removeItem("token");
+
       navigate("/");
     } catch (err) {
       console.error("Error al desloguear", err);
